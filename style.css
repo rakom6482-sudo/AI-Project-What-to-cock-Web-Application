@@ -260,19 +260,19 @@ body{
 .cursor-glow{
     position:fixed;
 
-    width:450px;
-    height:450px;
+    width:250px;
+    height:350px;
 
-    border-radius:50%;
+    border-radius:60%;
 
     pointer-events:none;
 
     background:
     radial-gradient(
         circle,
-        rgba(255,255,255,0.30) 0%,
+        rgba(255,255,255,0.30) 30%,
         rgba(255,255,255,0.14) 30%,
-        rgba(255,255,255,0.05) 55%,
+        rgba(255,255,255,0.05) 75%,
         transparent 75%
     );
 
