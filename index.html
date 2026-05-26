@@ -1,32 +1,478 @@
+Register · HTML
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smooth Site</title>
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FridgeFinder — Sign Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  :root {
+    --sage-light:  #9bbfb8;
+    --sage-mid:    #7aaba1;
+    --sage-dark:   #4a7570;
+    --sage-deeper: #355855;
+    --fog:         #c8dbd8;
+    --text-main:   #2a4442;
+    --text-muted:  #5a8480;
+    --white-glass: rgba(255,255,255,0.55);
+    --border-glass: rgba(255,255,255,0.45);
+  }
+ 
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+  }
+ 
+  /* ── Background canvas ── */
+  canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+ 
+  /* ── Layout ── */
+  .page {
+    position: relative;
+    z-index: 10;
+    width: 100%; height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+ 
+  /* ── Card ── */
+  .card {
+    width: 420px;
+    background: rgba(255,255,255,0.48);
+    border: 1px solid rgba(255,255,255,0.62);
+    border-radius: 24px;
+    padding: 48px 44px 44px;
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.7) inset,
+      0 24px 64px rgba(50,90,85,0.18),
+      0 4px 16px rgba(50,90,85,0.10);
+    opacity: 0;
+    transform: translateY(22px);
+    animation: cardIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;
+  }
+ 
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* ── Logo / brand ── */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+ 
+  .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--sage-dark);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+ 
+  .brand-name {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
+ 
+  .brand-tagline {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+ 
+  /* ── Heading ── */
+  h1 {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 1.25;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+ 
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+ 
+  /* ── Form ── */
+  .field {
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fieldIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+ 
+  .field:nth-child(1) { animation-delay: 0.35s; }
+  .field:nth-child(2) { animation-delay: 0.43s; }
+  .field:nth-child(3) { animation-delay: 0.51s; }
+  .field:nth-child(4) { animation-delay: 0.59s; }
+ 
+  @keyframes fieldIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+ 
+  input {
+    width: 100%;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(100,160,150,0.30);
+    background: rgba(255,255,255,0.60);
+    padding: 0 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+ 
+  input::placeholder {
+    color: rgba(90,132,128,0.45);
+    font-weight: 300;
+  }
+ 
+  input:focus {
+    border-color: var(--sage-mid);
+    background: rgba(255,255,255,0.80);
+    box-shadow: 0 0 0 3px rgba(122,171,161,0.18);
+  }
+ 
+  /* ── Row for name ── */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+ 
+  /* ── Submit button ── */
+  .btn {
+    margin-top: 8px;
+    width: 100%;
+    height: 50px;
+    border-radius: 14px;
+    border: none;
+    background: var(--sage-dark);
+    color: #e8f4f0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    opacity: 0;
+    animation: fieldIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.68s forwards;
+  }
+ 
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+ 
+  .btn:hover {
+    background: var(--sage-deeper);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(50,90,85,0.22);
+  }
+ 
+  .btn:active {
+    transform: translateY(0) scale(0.99);
+  }
+ 
+  /* ── Divider + login link ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 18px;
+    opacity: 0;
+    animation: fieldIn 0.5s ease 0.76s forwards;
+  }
+ 
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(100,160,150,0.22);
+  }
+ 
+  .divider span {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 300;
+  }
+ 
+  .login-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 300;
+    opacity: 0;
+    animation: fieldIn 0.5s ease 0.82s forwards;
+  }
+ 
+  .login-link a {
+    color: var(--sage-dark);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+ 
+  .login-link a:hover {
+    color: var(--sage-deeper);
+  }
+ 
+  /* ── Google button ── */
+  .btn-google {
+    width: 100%;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(100,160,150,0.30);
+    background: rgba(255,255,255,0.55);
+    color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.18s, border-color 0.18s;
+    opacity: 0;
+    animation: fieldIn 0.5s ease 0.76s forwards;
+  }
+ 
+  .btn-google:hover {
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(100,160,150,0.50);
+  }
+ 
+  .btn-google svg { flex-shrink: 0; }
+</style>
 </head>
 <body>
-
-    <div class="cursor-glow"></div>
-
-    <div class="container">
-
-        <div class="side left"></div>
-
-        <main class="content">
-
-            <!-- СЮДИ ВСТАВЛЯЙ ВСЕ -->
-
-        </main>
-
-        <div class="side right"></div>
-
+ 
+<canvas id="bg"></canvas>
+ 
+<div class="page">
+  <div class="card">
+ 
+    <div class="brand">
+      <div class="brand-icon">🥦</div>
+      <div>
+        <div class="brand-name">FridgeFinder</div>
+        <div class="brand-tagline">Cook what you have</div>
+      </div>
     </div>
-
-    <script src="script.js"></script>
-
+ 
+    <h1>Create your account</h1>
+    <p class="subtitle">Tell us what's in the fridge — we'll handle the rest.</p>
+ 
+    <div class="row">
+      <div class="field">
+        <label>First name</label>
+        <input type="text" placeholder="Anna" autocomplete="given-name" />
+      </div>
+      <div class="field">
+        <label>Last name</label>
+        <input type="text" placeholder="Smith" autocomplete="family-name" />
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Email</label>
+      <input type="email" placeholder="anna@example.com" autocomplete="email" />
+    </div>
+ 
+    <div class="field">
+      <label>Password</label>
+      <input type="password" placeholder="At least 8 characters" autocomplete="new-password" />
+    </div>
+ 
+    <button class="btn">Create account</button>
+ 
+    <div class="divider"><span>or</span></div>
+ 
+    <button class="btn-google">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+        <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+ 
+    <div class="login-link" style="margin-top:16px;">
+      Already have an account? <a href="#">Sign in</a>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script>
+const canvas = document.getElementById('bg');
+const ctx    = canvas.getContext('2d');
+let W, H;
+ 
+// Mouse state
+let mx = 0.5, my = 0.5;
+let tmx = 0.5, tmy = 0.5;
+ 
+// Ripple pool — each triggered by mouse movement
+const ripples = [];
+ 
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+ 
+window.addEventListener('mousemove', e => {
+  const nx = e.clientX / W;
+  const ny = e.clientY / H;
+  const dx = nx - tmx, dy = ny - tmy;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  tmx = nx; tmy = ny;
+ 
+  // Spawn a ripple only when mouse moves enough
+  if (dist > 0.004) {
+    ripples.push({ x: e.clientX, y: e.clientY, r: 0, maxR: 120 + dist * 600, alpha: 0.18, born: performance.now() });
+    if (ripples.length > 12) ripples.shift();
+  }
+});
+ 
+// Gradient orbs that drift slowly
+const orbs = [
+  { x: 0.25, y: 0.35, r: 0.55, h: 172, s: 28, l: 68, ox: 0, oy: 0, spd: 0.00018 },
+  { x: 0.70, y: 0.55, r: 0.50, h: 185, s: 22, l: 63, ox: 1.2, oy: 0.8, spd: 0.00022 },
+  { x: 0.50, y: 0.20, r: 0.45, h: 160, s: 20, l: 72, ox: 2.4, oy: 1.6, spd: 0.00015 },
+  { x: 0.15, y: 0.70, r: 0.40, h: 190, s: 18, l: 60, ox: 0.6, oy: 2.1, spd: 0.00025 },
+  { x: 0.85, y: 0.25, r: 0.42, h: 168, s: 24, l: 66, ox: 3.1, oy: 0.4, spd: 0.00020 },
+];
+ 
+function drawBg(t) {
+  // Base fill
+  ctx.fillStyle = '#8fb8b2';
+  ctx.fillRect(0, 0, W, H);
+ 
+  // Soft orbs
+  ctx.globalCompositeOperation = 'source-over';
+  orbs.forEach(o => {
+    const cx = (o.x + Math.sin(t * o.spd + o.ox) * 0.10) * W;
+    const cy = (o.y + Math.cos(t * o.spd + o.oy) * 0.08) * H;
+    const r  = o.r * Math.min(W, H);
+    const g  = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    g.addColorStop(0,   `hsla(${o.h}, ${o.s}%, ${o.l}%, 0.72)`);
+    g.addColorStop(0.5, `hsla(${o.h}, ${o.s}%, ${o.l - 4}%, 0.40)`);
+    g.addColorStop(1,   `hsla(${o.h}, ${o.s}%, ${o.l - 8}%, 0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  });
+ 
+  // Parallax light blob following mouse
+  const lx = (0.3 + mx * 0.4) * W;
+  const ly = (0.2 + my * 0.5) * H;
+  const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, W * 0.45);
+  lg.addColorStop(0,   'rgba(210,235,230, 0.30)');
+  lg.addColorStop(0.4, 'rgba(190,220,215, 0.14)');
+  lg.addColorStop(1,   'rgba(160,200,195, 0)');
+  ctx.fillStyle = lg;
+  ctx.fillRect(0, 0, W, H);
+}
+ 
+function drawRipples(now) {
+  ctx.globalCompositeOperation = 'source-over';
+ 
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    const rp = ripples[i];
+    const age = (now - rp.born) / 1000;   // seconds
+    const progress = rp.r / rp.maxR;
+ 
+    // Expand radius
+    rp.r += (rp.maxR - rp.r) * 0.035;
+    rp.alpha = 0.16 * (1 - progress) * (1 - progress);
+ 
+    if (rp.alpha < 0.003 || progress > 0.99) {
+      ripples.splice(i, 1);
+      continue;
+    }
+ 
+    // Draw concentric ring
+    ctx.beginPath();
+    ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255,255,255,${rp.alpha})`;
+    ctx.lineWidth = 1.5 * (1 - progress * 0.6);
+    ctx.stroke();
+ 
+    // Inner softer ring
+    if (rp.r > 20) {
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rp.r * 0.6, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,255,255,${rp.alpha * 0.5})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+}
+ 
+function frame(now) {
+  // Smooth mouse
+  mx += (tmx - mx) * 0.06;
+  my += (tmy - my) * 0.06;
+ 
+  ctx.clearRect(0, 0, W, H);
+  drawBg(now);
+  drawRipples(now);
+ 
+  requestAnimationFrame(frame);
+}
+ 
+requestAnimationFrame(frame);
+</script>
 </body>
-</html> uuuuuuuuuuuuuuuuuuu
+</html>
+ 
 
