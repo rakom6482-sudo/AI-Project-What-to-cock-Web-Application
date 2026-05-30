@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FridgeChef — Cook what you have</title>
+  <link rel="stylesheet" href="globals.css" />
+  <link rel="stylesheet" href="background.css" />
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<!-- ══ AUTH PAGE ══ -->
+<div id="auth-page">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="logo-icon">🥬</span>
+      <h1>FridgeChef</h1>
+      <p>Turn what's left into something delicious</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-register">Create account</button>
+      <button class="auth-tab" id="tab-login">Sign in</button>
+    </div>
+    <div class="auth-panel active" id="panel-register">
+      <div class="input-group">
+        <label for="reg-name">Your name</label>
+        <div class="input-wrap">
+          <input type="text" id="reg-name" placeholder="Alex Johnson" autocomplete="name" />
+          <span class="input-icon">👤</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="reg-email">Email</label>
+        <div class="input-wrap">
+          <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="reg-password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-password" placeholder="Min. 6 characters" autocomplete="new-password" />
+          <span class="input-icon">🔑</span>
+          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+      <div class="input-group">
+        <label for="reg-password-confirm">Confirm password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-password-confirm" placeholder="Repeat password" autocomplete="new-password" />
+          <span class="input-icon">🔒</span>
+          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <div class="form-message" id="reg-message"></div>
+      <button class="btn-submit" id="btn-register">
+        <span class="btn-label">Create account</span>
+        <div class="spinner"></div>
+      </button>
+      <p class="auth-footer">Already have an account? <a data-switch-tab="login">Sign in</a></p>
+    </div>
+    <div class="auth-panel" id="panel-login">
+      <div class="input-group">
+        <label for="log-email">Email</label>
+        <div class="input-wrap">
+          <input type="email" id="log-email" placeholder="you@example.com" autocomplete="email" />
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="log-password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="log-password" placeholder="Your password" autocomplete="current-password" />
+          <span class="input-icon">🔑</span>
+          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <div class="form-message" id="log-message"></div>
+      <button class="btn-submit" id="btn-login">
+        <span class="btn-label">Sign in</span>
+        <div class="spinner"></div>
+      </button>
+      <p class="auth-footer">Don't have an account? <a data-switch-tab="register">Create one</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard-page">
+
+  <!-- TOP LEFT -->
+  <nav class="top-nav-left">
+    <button class="nav-btn status-btn">
+      <span class="nav-icon">📡</span>
+      <span class="nav-label status-label">Status</span>
+      <span class="status-dot good"></span>
+    </button>
+    <button class="nav-btn music-btn">
+      <span class="music-icon nav-icon">🔇</span>
+      <span class="nav-label">Music</span>
+      <div class="volume-bar"></div>
+      <div class="volume-popup">Volume 70%</div>
+    </button>
+    <button class="nav-btn support-btn">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Help</span>
+    </button>
+  </nav>
+
+  <!-- TOP RIGHT -->
+  <nav class="top-nav">
+    <button class="nav-btn account-btn">
+      <div class="avatar">?</div>
+      <span class="nav-label">Account</span>
+    </button>
+    <button class="nav-btn favorites-btn">
+      <span class="nav-icon">🤍</span>
+      <span class="nav-label">Favorites</span>
+      <span class="badge">0</span>
+    </button>
+    <button class="nav-btn settings-btn">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </button>
+  </nav>
+
+  <!-- ACCOUNT PANEL -->
+  <div class="dropdown-panel" id="account-panel">
+    <div class="panel-user">
+      <div class="panel-avatar">?</div>
+      <div class="panel-user-info">
+        <h4 id="panel-name">Loading…</h4>
+        <p id="panel-email">—</p>
+        <p id="panel-joined" style="font-size:0.7rem;opacity:0.5;margin-top:2px;"></p>
+      </div>
+    </div>
+    <div class="panel-menu-item" id="btn-edit-profile"><span>👤</span><span>Edit profile</span></div>
+    <div class="panel-menu-item" id="btn-my-recipes"><span>📋</span><span>My recipes</span></div>
+    <div class="panel-menu-item danger" id="btn-logout"><span>🚪</span><span>Sign out</span></div>
+  </div>
+
+  <!-- FAVORITES PANEL -->
+  <div class="dropdown-panel" id="favorites-panel">
+    <div style="font-family:'Lora',serif;font-size:.95rem;color:var(--text-primary);margin-bottom:.75rem;font-weight:500;">Saved recipes</div>
+    <div class="favorites-list"></div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="dropdown-panel" id="settings-panel">
+    <div style="font-family:'Lora',serif;font-size:.95rem;color:var(--text-primary);margin-bottom:.9rem;font-weight:500;">Settings</div>
+    <div class="settings-row"><label>Show cooking tips</label><div class="toggle on" data-setting="cookingTips"></div></div>
+    <div class="settings-row"><label>Vegetarian mode</label><div class="toggle" data-setting="vegetarian"></div></div>
+    <div class="settings-row"><label>Compact view</label><div class="toggle" data-setting="compactView"></div></div>
+    <div class="settings-row"><label>Notifications</label><div class="toggle on" data-setting="notifications"></div></div>
+  </div>
+
+  <!-- SUPPORT PANEL -->
+  <div class="dropdown-panel support-form-panel" id="support-panel">
+    <div style="font-family:'Lora',serif;font-size:.95rem;color:var(--text-primary);margin-bottom:.8rem;font-weight:500;">Send us a message</div>
+    <div class="input-group" style="margin-bottom:.6rem;">
+      <input type="text" id="sup-name" placeholder="Your name" style="width:100%;padding:.5rem .8rem;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;" />
+    </div>
+    <div class="input-group" style="margin-bottom:.6rem;">
+      <input type="email" id="sup-email" placeholder="Your email" style="width:100%;padding:.5rem .8rem;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;" />
+    </div>
+    <div class="input-group" style="margin-bottom:.8rem;">
+      <textarea id="sup-message" placeholder="What do you need help with?" rows="3" style="width:100%;padding:.5rem .8rem;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;resize:none;"></textarea>
+    </div>
+    <button class="btn-support-send" id="btn-support-send">Send message</button>
+    <p class="support-msg" id="support-msg"></p>
+  </div>
+
+  <!-- CENTER SEARCH -->
+  <div class="search-area">
+    <div class="search-label">
+      <h2>What's in your fridge?</h2>
+      <p>Type ingredients and press Enter — we'll find what you can cook</p>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="e.g. eggs, spinach, cheddar…" id="ingredient-search" autocomplete="off" />
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">⏱ Time</span>
+        <div class="filter-chips" id="time-chips">
+          <button class="chip active" data-value="any">Any</button>
+          <button class="chip" data-value="15">15 min</button>
+          <button class="chip" data-value="30">30 min</button>
+          <button class="chip" data-value="60">1 hour</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">🍳 Equipment</span>
+        <div class="filter-chips" id="equip-chips">
+          <button class="chip active" data-value="any">Any</button>
+          <button class="chip" data-value="oven">Oven</button>
+          <button class="chip" data-value="microwave">Microwave</button>
+          <button class="chip" data-value="air fryer">Air fryer</button>
+          <button class="chip" data-value="blender">Blender</button>
+          <button class="chip" data-value="pan">Pan / pot</button>
+          <button class="chip" data-value="grill">Grill</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLLABLE RESULTS -->
+  <div id="results-overlay">
+    <div class="results-inner" id="results-inner">
+      <p class="results-status" id="results-status"></p>
+      <div id="results-grid"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+</div><!-- /dashboard-page -->
+
+<!-- ══ RECIPE MODAL ══ -->
+<div class="recipe-modal" id="recipe-modal">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+  <div class="modal-sheet">
+    <button class="modal-close-btn" id="modal-close">✕</button>
+    <div class="modal-hero">
+      <img class="modal-hero-img" id="modal-img" src="" alt="" />
+      <div class="modal-hero-overlay">
+        <h2 class="modal-title" id="modal-title">Loading…</h2>
+        <div class="modal-meta" id="modal-meta"></div>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="modal-loading">Fetching recipe details…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT PROFILE MODAL ══ -->
+<div class="recipe-modal" id="profile-modal">
+  <div class="modal-backdrop" id="profile-backdrop"></div>
+  <div class="modal-sheet modal-sheet-sm">
+    <button class="modal-close-btn" id="profile-modal-close">✕</button>
+    <div class="modal-body" style="padding:2rem;">
+      <h2 style="font-family:'Lora',serif;font-size:1.2rem;margin-bottom:1.5rem;color:var(--text-primary);">Edit profile</h2>
+      <div class="profile-avatar-edit">
+        <div class="avatar-preview" id="avatar-preview">?</div>
+        <div>
+          <button class="btn-upload" id="btn-upload-avatar">Upload photo</button>
+          <button class="btn-upload remove" id="btn-remove-avatar">Remove</button>
+          <p style="font-size:.7rem;color:var(--text-secondary);margin-top:.4rem;">JPG or PNG, up to ~2MB</p>
+        </div>
+        <input type="file" id="avatar-file" accept="image/*" style="display:none;" />
+      </div>
+      <div class="input-group" style="margin-bottom:1rem;">
+        <label style="font-size:.8rem;color:var(--text-secondary);display:block;margin-bottom:.4rem;">Display name</label>
+        <input type="text" id="edit-name-input" style="width:100%;padding:.7rem 1rem;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:12px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;" />
+      </div>
+      <div class="input-group" style="margin-bottom:1rem;">
+        <label style="font-size:.8rem;color:var(--text-secondary);display:block;margin-bottom:.4rem;">About you</label>
+        <textarea id="edit-bio-input" rows="3" maxlength="300" placeholder="Tell others about your cooking style…" style="width:100%;padding:.7rem 1rem;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:12px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:none;"></textarea>
+      </div>
+      <button class="btn-support-send" id="btn-save-profile">Save changes</button>
+      <p class="support-msg" id="profile-msg"></p>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script src="background.js"></script>
+<script src="dashboard.js"></script>
+<script src="auth-ui.js"></script>
+</body>
+</html>

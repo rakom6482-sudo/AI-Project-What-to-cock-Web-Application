@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  /* Colors */
+  --bg-base:       #4a7c72;
+  --bg-mid:        #6a9e93;
+  --bg-light:      #8bbdb5;
+  --bg-pale:       #a8cfc9;
+  --accent:        #2d5f57;
+  --accent-light:  #5a9e94;
+  --glass-bg:      rgba(255, 255, 255, 0.10);
+  --glass-border:  rgba(255, 255, 255, 0.18);
+  --glass-hover:   rgba(255, 255, 255, 0.16);
+  --text-primary:  #f0faf8;
+  --text-secondary: rgba(240, 250, 248, 0.65);
+  --text-muted:    rgba(240, 250, 248, 0.38);
+  --shadow-soft:   0 8px 40px rgba(30, 70, 64, 0.35);
+  --shadow-card:   0 16px 64px rgba(20, 55, 50, 0.45);
+
+  /* Status colors */
+  --status-good:   #4ecca3;
+  --status-mid:    #f5c842;
+  --status-bad:    #e05c5c;
+
+  /* Sizing */
+  --radius-sm:   10px;
+  --radius-md:   18px;
+  --radius-lg:   28px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 2px; }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
