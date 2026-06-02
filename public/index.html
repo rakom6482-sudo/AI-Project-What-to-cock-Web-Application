@@ -6,7 +6,7 @@
   <title>FridgeChef — Cook what you have</title>
   <link rel="stylesheet" href="globals.css" />
   <link rel="stylesheet" href="background.css" />
-  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="auth-split.css" />
   <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
@@ -14,81 +14,120 @@
 
 <!-- ══ AUTH PAGE ══ -->
 <div id="auth-page">
-  <div class="auth-card">
-    <div class="auth-brand">
-      <span class="logo-icon">🥬</span>
-      <h1>FridgeChef</h1>
-      <p>Turn what's left into something delicious</p>
+  <!-- LEFT: login/register form -->
+  <div class="auth-left">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="logo-icon">🥬</span>
+        <h1>FridgeChef</h1>
+        <p>Turn what's left into something delicious</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-register">Create account</button>
+        <button class="auth-tab" id="tab-login">Sign in</button>
+      </div>
+      <div class="auth-panel active" id="panel-register">
+        <div class="input-group">
+          <label for="reg-name">Your name</label>
+          <div class="input-wrap">
+            <input type="text" id="reg-name" placeholder="Alex Johnson" autocomplete="name" />
+            <span class="input-icon">👤</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="reg-email">Email</label>
+          <div class="input-wrap">
+            <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+            <span class="input-icon">✉️</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="reg-password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="reg-password" placeholder="Min. 6 characters" autocomplete="new-password" />
+            <span class="input-icon">🔑</span>
+            <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+          <div class="strength-label" id="strength-label"></div>
+        </div>
+        <div class="input-group">
+          <label for="reg-password-confirm">Confirm password</label>
+          <div class="input-wrap">
+            <input type="password" id="reg-password-confirm" placeholder="Repeat password" autocomplete="new-password" />
+            <span class="input-icon">🔒</span>
+            <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+          </div>
+        </div>
+        <div class="form-message" id="reg-message"></div>
+        <button class="btn-submit" id="btn-register">
+          <span class="btn-label">Create account</span>
+          <div class="spinner"></div>
+        </button>
+        <p class="auth-footer">Already have an account? <a data-switch-tab="login">Sign in</a></p>
+      </div>
+      <div class="auth-panel" id="panel-login">
+        <div class="input-group">
+          <label for="log-email">Email</label>
+          <div class="input-wrap">
+            <input type="email" id="log-email" placeholder="you@example.com" autocomplete="email" />
+            <span class="input-icon">✉️</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="log-password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="log-password" placeholder="Your password" autocomplete="current-password" />
+            <span class="input-icon">🔑</span>
+            <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
+          </div>
+        </div>
+        <div class="form-message" id="log-message"></div>
+        <button class="btn-submit" id="btn-login">
+          <span class="btn-label">Sign in</span>
+          <div class="spinner"></div>
+        </button>
+        <p class="auth-footer">Don't have an account? <a data-switch-tab="register">Create one</a></p>
+      </div>
     </div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-register">Create account</button>
-      <button class="auth-tab" id="tab-login">Sign in</button>
+  </div>
+
+  <!-- RIGHT: your AI-generated video goes here -->
+  <!-- How to use:
+       1. Generate your video (see the prompt below)
+       2. Create a folder:  public/video/
+       3. Put your file in: public/video/login.mp4
+       That's it. The video will fill this panel automatically.
+  -->
+  <div class="auth-right">
+    <video class="login-video" autoplay loop muted playsinline
+           oncanplay="this.style.opacity=1;document.getElementById('vid-placeholder').style.display='none'">
+      <source src="/video/login.mp4"  type="video/mp4" />
+      <source src="/video/login.webm" type="video/webm" />
+    </video>
+
+    <!-- shown while no video file exists yet -->
+    <div class="vid-placeholder" id="vid-placeholder">
+      <div class="vp-icon">🎬</div>
+      <p class="vp-title">Your animation goes here</p>
+      <p class="vp-sub">Add <code>public/video/login.mp4</code></p>
+      <p class="vp-sub" style="margin-top:.5rem;opacity:.5;">No animation yet, sorry!</p>
     </div>
-    <div class="auth-panel active" id="panel-register">
-      <div class="input-group">
-        <label for="reg-name">Your name</label>
-        <div class="input-wrap">
-          <input type="text" id="reg-name" placeholder="Alex Johnson" autocomplete="name" />
-          <span class="input-icon">👤</span>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="reg-email">Email</label>
-        <div class="input-wrap">
-          <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
-          <span class="input-icon">✉️</span>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="reg-password">Password</label>
-        <div class="input-wrap">
-          <input type="password" id="reg-password" placeholder="Min. 6 characters" autocomplete="new-password" />
-          <span class="input-icon">🔑</span>
-          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
-        </div>
-        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
-        <div class="strength-label" id="strength-label"></div>
-      </div>
-      <div class="input-group">
-        <label for="reg-password-confirm">Confirm password</label>
-        <div class="input-wrap">
-          <input type="password" id="reg-password-confirm" placeholder="Repeat password" autocomplete="new-password" />
-          <span class="input-icon">🔒</span>
-          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
-        </div>
-      </div>
-      <div class="form-message" id="reg-message"></div>
-      <button class="btn-submit" id="btn-register">
-        <span class="btn-label">Create account</span>
-        <div class="spinner"></div>
-      </button>
-      <p class="auth-footer">Already have an account? <a data-switch-tab="login">Sign in</a></p>
-    </div>
-    <div class="auth-panel" id="panel-login">
-      <div class="input-group">
-        <label for="log-email">Email</label>
-        <div class="input-wrap">
-          <input type="email" id="log-email" placeholder="you@example.com" autocomplete="email" />
-          <span class="input-icon">✉️</span>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="log-password">Password</label>
-        <div class="input-wrap">
-          <input type="password" id="log-password" placeholder="Your password" autocomplete="current-password" />
-          <span class="input-icon">🔑</span>
-          <button class="btn-toggle-pass" type="button" tabindex="-1">👁</button>
-        </div>
-      </div>
-      <div class="form-message" id="log-message"></div>
-      <button class="btn-submit" id="btn-login">
-        <span class="btn-label">Sign in</span>
-        <div class="spinner"></div>
-      </button>
-      <p class="auth-footer">Don't have an account? <a data-switch-tab="register">Create one</a></p>
+
+    <!-- brand mark always visible over the video -->
+    <div class="vid-brand">🥬 FridgeChef</div>
+
+    <!-- taglines always visible over the video -->
+    <div class="vid-taglines">
+      <span class="vid-tagline">Search thousands of recipes</span>
+      <span class="vid-tagline">Cook with what you already have</span>
+      <span class="vid-tagline">Filter by time &amp; equipment</span>
+      <span class="vid-tagline">Save your favourites</span>
+      <span class="vid-tagline">Share dishes with friends</span>
     </div>
   </div>
 </div>
+
 
 <!-- ══ DASHBOARD ══ -->
 <div id="dashboard-page">
@@ -205,6 +244,16 @@
           <button class="chip" data-value="blender">Blender</button>
           <button class="chip" data-value="pan">Pan / pot</button>
           <button class="chip" data-value="grill">Grill</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">↕ Sort by</span>
+        <div class="filter-chips" id="sort-chips">
+          <button class="chip active" data-value="">Relevance</button>
+          <button class="chip" data-value="popularity">Popularity</button>
+          <button class="chip" data-value="healthiness">Healthiest</button>
+          <button class="chip" data-value="time">Quickest</button>
+          <button class="chip" data-value="price">Cheapest</button>
         </div>
       </div>
     </div>

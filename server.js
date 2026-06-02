@@ -110,12 +110,13 @@ app.delete('/api/favorites/:recipeId', requireAuth, (req, res) => {
 // ── Recipe search (with pagination) ───────────────────────────────
 app.get('/api/recipes/search', async (req, res) => {
   if (!SPOON) return res.status(500).json({ error: 'SPOONACULAR_API_KEY not set in .env' });
-  const { query, time, equip, diet, offset } = req.query;
+  const { query, time, equip, diet, offset, sort } = req.query;
   const params = { query: query || '', number: 12, offset: Number(offset) || 0,
     addRecipeInformation: true, fillIngredients: true, apiKey: SPOON };
   if (time  && time  !== 'any') params.maxReadyTime = Number(time);
   if (equip && equip !== 'any') params.equipment    = equip;
   if (diet)                     params.diet         = diet;
+  if (sort)                     params.sort         = sort;   // popularity, healthiness, time, price
   try {
     const { data } = await axios.get('https://api.spoonacular.com/recipes/complexSearch', { params });
     res.json(data);   // includes results, totalResults, offset, number

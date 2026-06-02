@@ -59,7 +59,7 @@ const Dashboard = (() => {
   let pendingAvatar = null;    // base64 data URL waiting to be saved
   const PAGE_SIZE  = 12;
 
-  const filters = { time: 'any', equip: new Set(['any']) };
+  const filters = { time: 'any', equip: new Set(['any']), sort: '' };
 
   const $ = id  => document.getElementById(id);
   const Q = sel => document.querySelector(sel);
@@ -194,11 +194,12 @@ const Dashboard = (() => {
 
     document.querySelectorAll('.toggle[data-setting]').forEach(toggle => {
       const key = toggle.dataset.setting;
-      if (key in saved) toggle.classList.toggle('on', saved[key]);
+      if (key in saved) toggle.classList.toggle('on', !!saved[key]);
 
       toggle.addEventListener('click', () => {
+        toggle.classList.toggle('on');                 // ← flip the switch first
         const s = JSON.parse(localStorage.getItem('fc_settings') || '{}');
-        s[key] = toggle.classList.contains('on');
+        s[key] = toggle.classList.contains('on');       // now read the new state
         localStorage.setItem('fc_settings', JSON.stringify(s));
         applySettings(s);
       });
@@ -446,6 +447,14 @@ const Dashboard = (() => {
         else filters.equip = new Set(sel);
       }
     });
+
+    $('sort-chips')?.addEventListener('click', e => {
+      const chip = e.target.closest('.chip'); if (!chip) return;
+      $('sort-chips').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active'); filters.sort = chip.dataset.value;
+      // Re-run the current search instantly with the new sort
+      if (lastQuery) performSearch(lastQuery, 0);
+    });
   }
 
   // ── Search ────────────────────────────────────────────────────
@@ -487,6 +496,7 @@ const Dashboard = (() => {
     if (filters.time !== 'any') params.set('time', filters.time);
     const equip = [...filters.equip].filter(e => e !== 'any');
     if (equip.length) params.set('equip', equip.join(','));
+    if (filters.sort) params.set('sort', filters.sort);
     params.set('offset', page * PAGE_SIZE);
 
     const settings = JSON.parse(localStorage.getItem('fc_settings') || '{}');
